@@ -4,7 +4,9 @@ employee,
 inspector,
 ingredients,
 food_item,
-bill cascade;
+bill,
+change_restaurant,
+order_ingredients cascade;
 
 drop domain if exists d_type,
 d_position,
@@ -44,17 +46,24 @@ create table food_item (
     type f_type not null,
     price int not null,
     quantity int not null,
-    PRIMARY KEY (name, type)
+    primary key (name, type)
 );
 
 create table bill (
     type b_type primary key,
-    quantity int not null
+    quantity int not null,
+    paying_rid int references restaurant(rid) on delete cascade
 );
-
 
 create table change_restaurant (
     target_eid int,
-	eid int references employee(eid) on delete cascade,
-	rid int references restaurant(rid) on delete cascade
+    eid int references employee(eid) on delete cascade,
+    rid int references restaurant(rid) on delete cascade
+);
+
+create table order_ingredients (
+    accepted boolean default FALSE,
+    dlivery_date date not null,
+    ingredients_name varchar(32) references ingredients(name),
+    rid int references restaurant(rid)
 );
