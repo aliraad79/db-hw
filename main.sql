@@ -19,6 +19,8 @@ create domain d_position char(3) check (value in ('bs1', 'ms1', 'dr1'));
 
 create domain f_type char(3) check (value in ('fs1', 'mf1', 'fr1'));
 
+create domain ins_ind char(10) check (value in ('qual', 'health'));
+
 create domain b_type char(5) check (value in ('gas', 'water', 'plum'));
 
 create table restaurant (
@@ -43,7 +45,7 @@ create table ingredients (name varchar(32) primary key);
 
 create table food_item (
     name varchar(32),
-    type f_type not null,
+    type f_type not null, -- not correct
     price int not null,
     quantity int not null,
     primary key (name, type)
@@ -63,7 +65,16 @@ create table change_restaurant (
 
 create table order_ingredients (
     accepted boolean default FALSE,
-    dlivery_date date not null,
+    delivery_date date not null,
     ingredients_name varchar(32) references ingredients(name),
+    rid int references restaurant(rid)
+);
+
+create table inspecting_record (
+    date date not null,
+    score int not null,
+    indicators ins_ind not null,
+    -- not correct
+    inspector_name varchar(32) references inspector(name),
     rid int references restaurant(rid)
 );
