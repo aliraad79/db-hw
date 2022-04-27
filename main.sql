@@ -1,21 +1,22 @@
 drop table if exists restaurant,
 employee,
-employee,
 inspector,
 ingredients,
 food_item,
 bill,
 change_restaurant,
-order_ingredients cascade;
+order_ingredients,
+inspecting_record cascade;
 
-drop domain if exists d_type,
-d_position,
+drop domain if exists e_type,
+e_position,
 f_type,
+ins_ind,
 b_type;
 
-create domain d_type char(2) check (value in ('bs', 'ms', 'dr'));
+create domain e_type char(6) check (value in ('office', 'branch'));
 
-create domain d_position char(3) check (value in ('bs1', 'ms1', 'dr1'));
+create domain e_position char(7) check (value in ('manager', 'cook', 'host', 'cashier'));
 
 create domain f_type char(3) check (value in ('fs1', 'mf1', 'fr1'));
 
@@ -34,9 +35,9 @@ create table restaurant (
 create table employee (
     eid int primary key,
     name varchar(32),
-    type d_type default 'bs',
-    position d_position default 'ms1',
-    working_restaurant int references restaurant(rid) on delete cascade
+    type e_type default 'branch',
+    position e_position not null,
+    working_restaurant int references restaurant(rid) on delete cascade not null
 );
 
 create table inspector (name varchar(32) primary key);
