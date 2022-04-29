@@ -55,12 +55,17 @@ values
 insert into
     food_item
 values
-    ('double burger', 'burger', 'spicy', 75000, 1);
+    ('double burger', 'burger', ARRAY ['dietary'], 75000, 1);
 
 insert into
     food_item
 values
-    ('big pizza', 'pizza', 'spicy', 7000, 2);
+    ('big pizza', 'pizza', ARRAY ['spicy', 'vegetarian'], 7000, 2);
+
+insert into
+    food_item
+values
+    ('big pizza 2', 'pizza', NULL, 9000, 2);
 
 insert into
     current_cost
