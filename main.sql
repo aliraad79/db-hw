@@ -3,26 +3,33 @@ employee,
 inspector,
 ingredients,
 food_item,
-bill,
+current_cost,
 change_restaurant,
 order_ingredients,
 inspecting_record cascade;
 
 drop domain if exists e_type,
 e_position,
-f_type,
+f_label,
+f_category,
 ins_ind,
 b_type;
 
 create domain e_type char(6) check (value in ('office', 'branch'));
 
-create domain e_position char(7) check (value in ('manager', 'cook', 'host', 'cashier'));
+create domain e_position char(7) check (
+    value in ('manager', 'chef', 'waiter', 'cashier')
+);
 
-create domain f_type char(10) check (value in ('noshidani', 'asli', 'charb'));
+create domain f_label char(10) check (value in ('dietary', 'spicy', 'vegetarian'));
+
+create domain f_category char(10) check (
+    value in ('pizza', 'burger', 'coldDrink', 'hotDrink')
+);
 
 create domain ins_ind char(10) check (value in ('qual', 'health'));
 
-create domain b_type char(5) check (value in ('gas', 'water', 'plum'));
+create domain b_type char(6) check (value in ('gas', 'water', 'repair', 'other'));
 
 create table restaurant (
     rid int primary key,
@@ -40,19 +47,19 @@ create table employee (
     working_restaurant int references restaurant(rid) on delete cascade not null
 );
 
-create table inspector (name varchar(32) primary key);
+create table inspector (id int primary key, name varchar(32));
 
 create table ingredients (name varchar(32) primary key);
 
 create table food_item (
-    name varchar(32),
-    type f_type not null, -- not correct
+    name varchar(32) primary key,
+    category f_category not null,
+    label f_label not null, -- not correct
     price int not null,
-    quantity int not null,
-    primary key (name, type)
+    quantity int not null
 );
 
-create table bill (
+create table current_cost (
     type b_type primary key,
     quantity int not null,
     paying_rid int references restaurant(rid) on delete cascade
