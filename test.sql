@@ -80,7 +80,7 @@ values
 insert into
     order_ingredients
 values
-    ('2021-10-10 10:20:30', 'meat', 1, TRUE);
+    ('2021-10-10 10:20:30 +03:30', 'meat', 1, TRUE);
 
 insert into
     inspecting_record
