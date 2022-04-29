@@ -6,7 +6,8 @@ food_item,
 current_cost,
 change_restaurant,
 order_ingredients,
-inspecting_record cascade;
+inspecting_record, 
+customer_order cascade;
 
 drop domain if exists e_type,
 e_position,
@@ -72,14 +73,15 @@ create table change_restaurant (
     target_restaurant int references restaurant(rid) on delete cascade,
     eid int references employee(eid) on delete cascade,
     former_restaurant int references restaurant(rid) on delete cascade,
+    accepted boolean default FALSE,
     primary key (eid, former_restaurant, target_restaurant)
 );
 
 create table order_ingredients (
-    accepted boolean default FALSE,
     delivery_date timestamp without time zone not null, -- timezoned?
     ingredients_name varchar(32) references ingredients(name),
-    rid int references restaurant(rid)
+    rid int references restaurant(rid),
+    accepted boolean default FALSE
 );
 
 create table inspecting_record (
