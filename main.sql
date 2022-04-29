@@ -1,3 +1,6 @@
+-- 97105703
+-- 98170924
+-- 98171148
 drop table if exists restaurant,
 employee,
 inspector,
