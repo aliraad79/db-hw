@@ -18,7 +18,7 @@ create domain e_type char(6) check (value in ('office', 'branch'));
 
 create domain e_position char(7) check (value in ('manager', 'cook', 'host', 'cashier'));
 
-create domain f_type char(3) check (value in ('fs1', 'mf1', 'fr1'));
+create domain f_type char(10) check (value in ('noshidani', 'asli', 'charb'));
 
 create domain ins_ind char(10) check (value in ('qual', 'health'));
 
@@ -59,7 +59,7 @@ create table bill (
 );
 
 create table change_restaurant (
-    target_eid int,
+    target_eid int references restaurant(rid) on delete cascade,
     eid int references employee(eid) on delete cascade,
     rid int references restaurant(rid) on delete cascade
 );
