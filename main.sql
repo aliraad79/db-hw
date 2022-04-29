@@ -12,7 +12,7 @@ drop domain if exists e_type,
 e_position,
 f_label,
 f_category,
-ins_ind,
+ins_indicators,
 b_type;
 
 create domain e_type char(6) check (value in ('office', 'branch'));
@@ -27,7 +27,9 @@ create domain f_category char(10) check (
     value in ('pizza', 'burger', 'coldDrink', 'hotDrink')
 );
 
-create domain ins_ind char(10) check (value in ('qual', 'health'));
+create domain ins_indicators char(10) check (
+    value in ('hygiene', 'pricing', 'behavioral', 'other')
+);
 
 create domain b_type char(6) check (value in ('gas', 'water', 'repair', 'other'));
 
@@ -54,7 +56,8 @@ create table ingredients (name varchar(32) primary key);
 create table food_item (
     name varchar(32) primary key,
     category f_category not null,
-    label f_label not null, -- not correct
+    label f_label not null,
+    -- not correct
     price int not null,
     quantity int not null
 );
@@ -66,14 +69,15 @@ create table current_cost (
 );
 
 create table change_restaurant (
-    target_eid int references restaurant(rid) on delete cascade,
+    target_restaurant int references restaurant(rid) on delete cascade,
     eid int references employee(eid) on delete cascade,
-    rid int references restaurant(rid) on delete cascade
+    former_restaurant int references restaurant(rid) on delete cascade,
+    primary key (eid, former_restaurant, target_restaurant)
 );
 
 create table order_ingredients (
     accepted boolean default FALSE,
-    delivery_date date not null,
+    delivery_date timestamp without time zone not null, -- timezoned?
     ingredients_name varchar(32) references ingredients(name),
     rid int references restaurant(rid)
 );
@@ -81,8 +85,16 @@ create table order_ingredients (
 create table inspecting_record (
     date date not null,
     score int not null,
-    indicators ins_ind not null,
-    -- not correct
-    inspector_name varchar(32) references inspector(name),
-    rid int references restaurant(rid)
+    indicators ins_indicators not null,
+    inspector_id int references inspector(id),
+    rid int references restaurant(rid) on delete cascade -- ?
+);
+
+create table customer_order (
+    id int primary key,
+    date timestamp without time zone not null,
+    score int not null,
+    comment varchar(512),
+    food_name varchar(32) references food_item(name),
+    rid int references restaurant(rid) -- ?
 );
