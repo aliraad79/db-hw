@@ -3,9 +3,11 @@ employee,
 inspector,
 ingredients,
 food_item,
-bill,
+current_cost,
 change_restaurant,
-order_ingredients cascade;
+order_ingredients,
+inspecting_record,
+customer_order cascade;
 
 insert into
     restaurant
@@ -36,34 +38,61 @@ values
         1,
         'ali',
         'branch',
-        'cook',
+        'chef',
         1
     );
 
 insert into
     inspector
 values
-    ('detective gadget');
+    (1, 'detective gadget');
 
 insert into
     ingredients
 values
-    ('kalam');
+    ('meat');
 
 insert into
     food_item
 values
-    ('burger', 'asli', 75000, 1);
+    ('double burger', 'burger', 'spicy', 75000, 1);
 
 insert into
-    bill
+    food_item
+values
+    ('big pizza', 'pizza', 'spicy', 7000, 2);
+
+insert into
+    current_cost
 values
     ('gas', 5000, 1);
 
 insert into
     change_restaurant
 values
-    (2, 1, 1);
+    (2, 1, 1, FALSE);
+
+insert into
+    order_ingredients
+values
+    ('2021-10-10 10:20:30', 'meat', 1, TRUE);
+
+insert into
+    inspecting_record
+values
+    ('2021-10-10 10:20:30', 15, 'hygiene', 1, 2);
+
+insert into
+    customer_order
+values
+    (
+        1,
+        '2021-10-10 10:20:30',
+        16,
+        'yes it is good',
+        'big pizza',
+        1
+    );
 
 select
     *

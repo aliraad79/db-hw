@@ -3,26 +3,36 @@ employee,
 inspector,
 ingredients,
 food_item,
-bill,
+current_cost,
 change_restaurant,
 order_ingredients,
-inspecting_record cascade;
+inspecting_record, 
+customer_order cascade;
 
 drop domain if exists e_type,
 e_position,
-f_type,
-ins_ind,
+f_label,
+f_category,
+ins_indicators,
 b_type;
 
 create domain e_type char(6) check (value in ('office', 'branch'));
 
-create domain e_position char(7) check (value in ('manager', 'cook', 'host', 'cashier'));
+create domain e_position char(7) check (
+    value in ('manager', 'chef', 'waiter', 'cashier')
+);
 
-create domain f_type char(3) check (value in ('fs1', 'mf1', 'fr1'));
+create domain f_label char(10) check (value in ('dietary', 'spicy', 'vegetarian'));
 
-create domain ins_ind char(10) check (value in ('qual', 'health'));
+create domain f_category char(10) check (
+    value in ('pizza', 'burger', 'coldDrink', 'hotDrink')
+);
 
-create domain b_type char(5) check (value in ('gas', 'water', 'plum'));
+create domain ins_indicators char(10) check (
+    value in ('hygiene', 'pricing', 'behavioral', 'other')
+);
+
+create domain b_type char(6) check (value in ('gas', 'water', 'repair', 'other'));
 
 create table restaurant (
     rid int primary key,
@@ -40,42 +50,53 @@ create table employee (
     working_restaurant int references restaurant(rid) on delete cascade not null
 );
 
-create table inspector (name varchar(32) primary key);
+create table inspector (id int primary key, name varchar(32));
 
 create table ingredients (name varchar(32) primary key);
 
 create table food_item (
-    name varchar(32),
-    type f_type not null, -- not correct
+    name varchar(32) primary key,
+    category f_category not null,
+    label f_label not null,
+    -- not correct
     price int not null,
-    quantity int not null,
-    primary key (name, type)
+    quantity int not null
 );
 
-create table bill (
+create table current_cost (
     type b_type primary key,
     quantity int not null,
     paying_rid int references restaurant(rid) on delete cascade
 );
 
 create table change_restaurant (
-    target_eid int,
+    target_restaurant int references restaurant(rid) on delete cascade,
     eid int references employee(eid) on delete cascade,
-    rid int references restaurant(rid) on delete cascade
+    former_restaurant int references restaurant(rid) on delete cascade,
+    accepted boolean default FALSE,
+    primary key (eid, former_restaurant, target_restaurant)
 );
 
 create table order_ingredients (
-    accepted boolean default FALSE,
-    delivery_date date not null,
+    delivery_date timestamp without time zone not null, -- timezoned?
     ingredients_name varchar(32) references ingredients(name),
-    rid int references restaurant(rid)
+    rid int references restaurant(rid),
+    accepted boolean default FALSE
 );
 
 create table inspecting_record (
     date date not null,
     score int not null,
-    indicators ins_ind not null,
-    -- not correct
-    inspector_name varchar(32) references inspector(name),
-    rid int references restaurant(rid)
+    indicators ins_indicators not null,
+    inspector_id int references inspector(id),
+    rid int references restaurant(rid) on delete cascade -- ?
+);
+
+create table customer_order (
+    id int primary key,
+    date timestamp without time zone not null,
+    score int not null,
+    comment varchar(512),
+    food_name varchar(32) references food_item(name),
+    rid int references restaurant(rid) -- ?
 );
