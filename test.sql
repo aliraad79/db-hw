@@ -69,7 +69,7 @@ values
 insert into
     transfer_to_restaurant
 values
-    (2, 1, 1, '2021-01-10', 'accepted');
+    (2, 1, 1, '2021-01-10', '2021-01-15', 'accepted');
 
 insert into
     order_ingredients

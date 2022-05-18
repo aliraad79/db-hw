@@ -62,7 +62,6 @@ create table employee (
 
 create table ingredients (name varchar(32) primary key);
 
-
 create table food (
     name varchar(32) primary key,
     category f_category not null
@@ -75,7 +74,7 @@ create table food_labels (
 
 create table current_cost (
     type c_type not null,
-    amount int not null,
+    amount money not null,
     date date not null,
     accepted boolean default null,
     paying_rid int references restaurant(rid) on delete cascade,
@@ -86,7 +85,8 @@ create table transfer_to_restaurant (
     destination_restaurant int references restaurant(rid) on delete cascade,
     eid int references employee(eid) on delete cascade,
     origin_restaurant int references restaurant(rid) on delete cascade,
-    date date not null,
+    create_at date not null,
+    accepted_at date date date not null,
     state transfer_state default null,
     primary key (eid, origin_restaurant, destination_restaurant)
 );
