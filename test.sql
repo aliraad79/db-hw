@@ -1,10 +1,9 @@
 truncate table restaurant,
 employee,
-inspector,
 ingredients,
-food_item,
+food,
 current_cost,
-change_restaurant,
+transfer_to_restaurant,
 order_ingredients,
 inspecting_record,
 customer_order cascade;
@@ -17,7 +16,7 @@ values
         'khomaze',
         50,
         'tehran - shomal',
-        '12.5465 31.65656'
+        '(12.54657, 31.65656)'
     );
 
 insert into
@@ -28,7 +27,7 @@ values
         'yum yum',
         80,
         'karaj',
-        '12.549999 99.65656'
+        '(12.54999, 99.65656)'
     );
 
 insert into
@@ -43,39 +42,34 @@ values
     );
 
 insert into
-    inspector
-values
-    (1, 'detective gadget');
-
-insert into
     ingredients
 values
     ('meat');
 
 insert into
-    food_item
+    food
 values
-    ('double burger', 'burger', ARRAY ['dietary'], 75000, 1);
+    ('double burger', 'burger');
 
 insert into
-    food_item
+    food
 values
-    ('big pizza', 'pizza', ARRAY ['spicy', 'vegetarian'], 7000, 2);
+    ('big pizza', 'pizza');
 
 insert into
-    food_item
+    food
 values
-    ('big pizza 2', 'pizza', NULL, 9000, 2);
+    ('big pizza 2', 'pizza');
 
 insert into
     current_cost
 values
-    ('gas', 5000, 1);
+    ('gas', 5000, '2021-10-10', TRUE, 1);
 
 insert into
-    change_restaurant
+    transfer_to_restaurant
 values
-    (2, 1, 1, FALSE);
+    (2, 1, 1, '2021-01-10', 'accepted');
 
 insert into
     order_ingredients
@@ -95,7 +89,6 @@ values
         '2021-10-10 10:20:30',
         16,
         'yes it is good',
-        'big pizza',
         1
     );
 
